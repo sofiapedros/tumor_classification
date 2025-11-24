@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 runs/
 images/
+mlruns/
+*.png
 # C extensions
 *.so
 
