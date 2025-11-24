@@ -1,0 +1,19 @@
+stages:
+  prepare:
+    cmd: echo "Verificando que los datos existen..."
+    deps:
+    - data/BrEaST-Lesions-USG-clinical-data-Dec-15-2023.xlsx
+  train:
+    cmd: python -m src.train --lr ${train.lr} --epochs ${train.epochs} --dropout ${train.dropout}
+    deps:
+    - src/train.py
+    - requirements.txt
+    - data/BrEaST-Lesions-USG-clinical-data-Dec-15-2023.xlsx
+    outs:
+    - model.pkl
+    metrics:
+    - mlflow_metrics.json
+    params:
+    - train.lr 
+    - train.epochs
+    - train.dropout

@@ -1,0 +1,38 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: echo "Verificando que los datos existen..."
+    deps:
+    - path: data/BrEaST-Lesions-USG-clinical-data-Dec-15-2023.xlsx
+      hash: md5
+      md5: b2fa8ac1deb00590a5020b9ae00ff1dd
+      size: 40294
+  train:
+    cmd: python -m src.train --lr 0.001 --epochs 30 --dropout 0.2
+    deps:
+    - path: data/BrEaST-Lesions-USG-clinical-data-Dec-15-2023.xlsx
+      hash: md5
+      md5: b2fa8ac1deb00590a5020b9ae00ff1dd
+      size: 40294
+    - path: requirements.txt
+      hash: md5
+      md5: d01ab3677733eece391d430e7c378481
+      size: 152
+    - path: src/train.py
+      hash: md5
+      md5: 3fb257b1a16c1df38314f0b233eaf48d
+      size: 3915
+    params:
+      params.yaml:
+        train.dropout: 0.2
+        train.epochs: 30
+        train.lr: 0.001
+    outs:
+    - path: mlflow_metrics.json
+      hash: md5
+      md5: 85d7e80a57fc6cffa21ff8d4a3e61d7f
+      size: 19
+    - path: model.pkl
+      hash: md5
+      md5: 8111f3a74b3220342982e3fd9b86188e
+      size: 216855
