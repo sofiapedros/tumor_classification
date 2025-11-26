@@ -46,3 +46,56 @@ jobs:
           MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
         run: |
           dvc repro
+
+  deploy-to-gke:
+    needs: train-and-report
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: DVC and Python setup
+        uses: iterative/setup-dvc@v1
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - id: 'auth'
+        name: Authenticate to Google Cloud
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+      - name: Set up gcloud CLI and kubectl
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: 'latest'
+          install_components: 'gke-gcloud-auth-plugin'
+      - name: Get GKE credentials
+        run: gcloud container clusters get-credentials ${{ vars.GKE_CLUSTER }} --zone ${{ vars.GKE_ZONE }} --project ${{ vars.GCP_PROJECT_ID }}
+      - name: DVC Pull
+        env:
+          DAGSHUB_API_KEY: ${{ secrets.DAGSHUB_API_KEY }}
+  
+        run: |
+          dvc remote modify origin --local access_key_id $DAGSHUB_API_KEY
+          dvc remote modify origin --local secret_access_key $DAGSHUB_API_KEY
+          dvc pull -r origin
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name:  Auth docker
+        run: gcloud auth configure-docker
+
+      - name: Build API Docker Image
+        id: build_api
+        run: |
+          IMAGE_NAME="gcr.io/${{ vars.GCP_PROJECT_ID}}/tumor-api:latest"
+          docker build -t $IMAGE_NAME .
+          docker push grc.io/${{ vars.GCP_PROJECT_ID  }}/tumor-api:latest
+
+      - name: Deploy to GKE
+        run: |
+          kubectl apply -f deployment.yaml
+          kubectl apply -f service.yaml
+      

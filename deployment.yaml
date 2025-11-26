@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tumor-api-deployment
+  labels:
+    app: tumor-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tumor-api
+  template:
+    metadata:
+      labels:
+        app: tumor-api
+    spec:
+      containers:
+        - name: tumor-api
+          image: grc.io/icaifinal/tumor-api:latest
+          ports:
+          - containerPort: 5000
