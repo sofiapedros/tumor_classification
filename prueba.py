@@ -146,12 +146,12 @@ def extract_dataset_config(excel_file, sheet_name):
 if __name__ == "__main__":
     try:
         columns, stats = extract_dataset_config(EXCEL_FILE, SHEET_NAME)
-        print("\n✅ CONFIGURACIÓN EXTRAÍDA EXITOSAMENTE")
-        print(f"📊 Total de features: {len(columns)}")
+        print("\n CONFIGURACIÓN EXTRAÍDA EXITOSAMENTE")
+        print(f" Total de features: {len(columns)}")
     except FileNotFoundError:
-        print(f"\n❌ ERROR: No se encontró el archivo '{EXCEL_FILE}'")
+        print(f"\n ERROR: No se encontró el archivo '{EXCEL_FILE}'")
         print("Por favor, actualiza la variable EXCEL_FILE con la ruta correcta")
     except Exception as e:
-        print(f"\n❌ ERROR: {str(e)}")
+        print(f"\n ERROR: {str(e)}")
         import traceback
         traceback.print_exc()

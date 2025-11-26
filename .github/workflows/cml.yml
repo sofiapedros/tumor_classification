@@ -94,8 +94,18 @@ jobs:
           docker build -t $IMAGE_NAME .
           docker push grc.io/${{ vars.GCP_PROJECT_ID  }}/tumor-api:latest
 
+      - name: Build Web Docker Image
+        id: build_web
+        run: |
+          IMAGE_NAME="gcr.io/${{ vars.GCP_PROJECT_ID}}/mlops-tumor-web:latest"
+          docker build -t $IMAGE_NAME .
+          docker push grc.io/${{ vars.GCP_PROJECT_ID  }}/mlops-tumor-web:latest
+
       - name: Deploy to GKE
         run: |
-          kubectl apply -f deployment.yaml
-          kubectl apply -f service.yaml
+          kubectl apply -f api-deployment.yaml
+          kubectl apply -f api-service.yaml
+          kubectl apply -f web-deployment.yaml
+          kubectl apply -f web-service.yaml
+      
       

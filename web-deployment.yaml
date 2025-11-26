@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mlops-tumor-web-deployment
+  labels:
+    app: mlops-tumor-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mlops-tumor-web
+  template:
+    metadata:
+      labels:
+        app: mlops-tumor-web
+    spec:
+      containers:
+      - name: mlops-tumor-web
+        image: grc.io/icaifinal/mlops-tumor-web:latest
+        ports:
+        - containerPort: 8501
+        env:
+        - name: API_URL
+          value: http://tumor-api-service:5000/predict
