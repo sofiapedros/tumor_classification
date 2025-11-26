@@ -92,14 +92,14 @@ jobs:
         run: |
           IMAGE_NAME="gcr.io/${{ vars.GCP_PROJECT_ID}}/tumor-api:latest"
           docker build -t $IMAGE_NAME .
-          docker push grc.io/${{ vars.GCP_PROJECT_ID  }}/tumor-api:latest
+          docker push gcr.io/${{ vars.GCP_PROJECT_ID  }}/tumor-api:latest
 
       - name: Build Web Docker Image
         id: build_web
         run: |
-          IMAGE_NAME="gcr.io/${{ vars.GCP_PROJECT_ID}}/mlops-tumor-web:latest"
+          IMAGE_NAME="gcr.io/${{ vars.GCP_PROJECT_ID  }}/mlops-tumor-web:latest"
           docker build -t $IMAGE_NAME .
-          docker push grc.io/${{ vars.GCP_PROJECT_ID  }}/mlops-tumor-web:latest
+          docker push gcr.io/${{ vars.GCP_PROJECT_ID  }}/mlops-tumor-web:latest
 
       - name: Deploy to GKE
         run: |
