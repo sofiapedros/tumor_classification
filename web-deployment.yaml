@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mlops-tumor-web
-        image: grc.io/icaifinal/mlops-tumor-web:latest
+        image: gcr.io/icaifinal/mlops-tumor-web:latest
         ports:
         - containerPort: 8501
         env:

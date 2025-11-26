@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: tumor-api
-          image: grc.io/icaifinal/tumor-api:latest
+          image: gcr.io/icaifinal/tumor-api:latest
           ports:
           - containerPort: 5000
