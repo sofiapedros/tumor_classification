@@ -98,7 +98,7 @@ jobs:
         id: build_web
         run: |
           IMAGE_NAME="gcr.io/${{ vars.GCP_PROJECT_ID  }}/mlops-tumor-web:latest"
-          docker build -t $IMAGE_NAME .
+          docker build -t $IMAGE_NAME -f Dockerfile.web .
           docker push gcr.io/${{ vars.GCP_PROJECT_ID  }}/mlops-tumor-web:latest
 
       - name: Deploy to GKE
