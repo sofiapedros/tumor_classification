@@ -102,6 +102,7 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL'
       - name: Push API DOCKER IMAGE
+        run: |
           docker push ${{ env.IMAGE_API }}
 
       - name: Build Web Docker Image
@@ -120,6 +121,7 @@ jobs:
           severity: 'CRITICAL'
 
       - name: Push Web DOCKER IMAGE
+        run: |
           docker push ${{ env.IMAGE_WEB }}
 
       - name: Deploy to GKE
