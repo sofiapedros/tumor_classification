@@ -97,7 +97,7 @@ jobs:
       - name: Trivy scan for API Image
         uses: aquasecurity/trivy-action@master
         with:
-          img-ref: ${{ env.IMAGE_API }}
+          image-ref: ${{ env.IMAGE_API }}
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL'
@@ -115,7 +115,7 @@ jobs:
       - name: Trivy scan for API Image
         uses: aquasecurity/trivy-action@master
         with:
-          img-ref: ${{ env.IMAGE_WEB }}
+          image-ref: ${{ env.IMAGE_WEB }}
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL'
