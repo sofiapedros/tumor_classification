@@ -12,3 +12,4 @@ torch
 tensorboard
 openpyxl
 streamlit
+prometheus-client

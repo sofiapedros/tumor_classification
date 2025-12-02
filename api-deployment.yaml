@@ -18,4 +18,5 @@ spec:
         - name: tumor-api
           image: gcr.io/icaifinal/tumor-api:latest
           ports:
-          - containerPort: 5000
+          - name: metrics
+            containerPort: 5000

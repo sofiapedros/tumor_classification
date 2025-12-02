@@ -6,7 +6,8 @@ spec:
   selector:
     app: tumor-api
   ports:
-    - protocol: TCP
+    - name: metrics
+      protocol: TCP
       port: 5000
       targetPort: 5000
   type: ClusterIP

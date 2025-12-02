@@ -1,0 +1,13 @@
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: tumor-api-pod-monitor
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: tumor-api
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s
