@@ -92,14 +92,35 @@ jobs:
         run: |
           IMAGE_NAME="gcr.io/${{ vars.GCP_PROJECT_ID}}/tumor-api:latest"
           docker build -t $IMAGE_NAME .
-          docker push gcr.io/${{ vars.GCP_PROJECT_ID  }}/tumor-api:latest
+          echo "IMAGE_API=$IMAGE_NAME" >> $GITHUB_ENV
+        
+      - name: Trivy scan for API Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          img-ref: ${{ env.IMAGE_API }}
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL'
+      - name: Push API DOCKER IMAGE
+          docker push ${{ env.IMAGE_API }}
 
       - name: Build Web Docker Image
         id: build_web
         run: |
           IMAGE_NAME="gcr.io/${{ vars.GCP_PROJECT_ID  }}/mlops-tumor-web:latest"
           docker build -t $IMAGE_NAME -f Dockerfile.web .
-          docker push gcr.io/${{ vars.GCP_PROJECT_ID  }}/mlops-tumor-web:latest
+          echo "IMAGE_WEB=$IMAGE_NAME" >> $GITHUB_ENV
+
+      - name: Trivy scan for API Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          img-ref: ${{ env.IMAGE_WEB }}
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL'
+
+      - name: Push Web DOCKER IMAGE
+          docker push ${{ env.IMAGE_WEB }}
 
       - name: Deploy to GKE
         run: |
