@@ -87,17 +87,19 @@ jobs:
       - name:  Auth docker
         run: gcloud auth configure-docker
 
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/local/lib/android
+          docker system prune -af || true
+          docker builder prune -af || true
+
       - name: Build API Docker Image
         id: build_api
         run: |
           IMAGE_NAME="gcr.io/${{ vars.GCP_PROJECT_ID}}/tumor-api:latest"
           docker build -t $IMAGE_NAME .
           echo "IMAGE_API=$IMAGE_NAME" >> $GITHUB_ENV
-      - name: Free disk space
-        run: |
-          sudo rm -rf /usr/local/lib/android
-          docker system prune -af || true
-          docker builder prune -af || true
+
       - name: Trivy scan for API Image
         uses: aquasecurity/trivy-action@master
         with:
@@ -108,18 +110,19 @@ jobs:
       - name: Push API DOCKER IMAGE
         run: |
           docker push ${{ env.IMAGE_API }}
-
+      
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/local/lib/android
+          docker system prune -af || true
+          docker builder prune -af || true
       - name: Build Web Docker Image
         id: build_web
         run: |
           IMAGE_NAME="gcr.io/${{ vars.GCP_PROJECT_ID  }}/mlops-tumor-web:latest"
           docker build -t $IMAGE_NAME -f Dockerfile.web .
           echo "IMAGE_WEB=$IMAGE_NAME" >> $GITHUB_ENV
-      - name: Free disk space
-        run: |
-          sudo rm -rf /usr/local/lib/android
-          docker system prune -af || true
-          docker builder prune -af || true
+
       - name: Trivy scan for API Image
         uses: aquasecurity/trivy-action@master
         with:
